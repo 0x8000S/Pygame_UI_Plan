@@ -4,7 +4,11 @@ pygame.init()
 
 
 class Button():
-    def __init__(self, Text, x, y, fg=(255, 255, 255), fonts="SimHei", font_size=16, scale=1) -> None:
+    def __init__(self, Text, x, y, fg=(255, 255, 255), bg=(0, 0, 0), border_color=(255, 255, 255), change_color=(255, 0, 0),  fonts="SimHei", font_size=16, scale=1) -> None:
+        self.fg = fg
+        self.bg = bg
+        self.lg = border_color
+        self.pg = change_color
         font = pygame.font.SysFont(fonts, font_size)
         self.image = font.render(Text, True, fg)
         width = self.image.get_width()
@@ -17,14 +21,14 @@ class Button():
     def get_rect(self) -> pygame.Rect:
         return self.rect
 
-    def draw(self, surface, bg=(0, 0, 0), lg=(255, 255, 255), pg=(255, 0, 0)) -> None:
-        pygame.draw.rect(surface, bg, (self.rect.x, self.rect.y, self.image.get_width(), self.image.get_height()))
-        self.bc = pygame.draw.rect(surface, lg,
+    def draw(self, surface) -> None:
+        pygame.draw.rect(surface, self.bg, (self.rect.x, self.rect.y, self.image.get_width(), self.image.get_height()))
+        self.bc = pygame.draw.rect(surface, self.lg,
                                    (self.rect.x, self.rect.y, self.image.get_width(), self.image.get_height()), 3)
         surface.blit(self.image, (self.rect.x, self.rect.y))
         pos = pygame.mouse.get_pos()
         if self.bc.collidepoint(pos):
-            self.bc = pygame.draw.rect(surface, pg,(self.rect.x, self.rect.y, self.image.get_width(), self.image.get_height()), 3)
+            self.bc = pygame.draw.rect(surface, self.pg,(self.rect.x, self.rect.y, self.image.get_width(), self.image.get_height()), 3)
 
     def get_button_state(self) -> bool:
         pos = pygame.mouse.get_pos()
